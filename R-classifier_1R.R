@@ -112,7 +112,20 @@ while (itz <= do_loops) {
   #--- 5. train classification ---#
   #-------------------------------#
   
-  #--> in progress
+  auto_data = auto_data_train
+  #--> preparations
+  md_l = length(md_names) #--> md_names defined in 2.
+  F_Quote = seq(0,0, length.out = md_l)
+  i_Anzahl = seq(0,0, length.out = md_l)
+  
+  test_vec = NULL #--> check counts
+  prognos_vec = NULL #--> vector for the respective prediction values
+  
+  
+  #--> in progress...
+  
+  
+  
   
   itz = itz + 1
 }
