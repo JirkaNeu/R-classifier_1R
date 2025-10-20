@@ -1,4 +1,7 @@
 # R-classifier_1R
+
++++ in progress +++
+
 a "1R" or "OneR" classifier written in R - a simple classifier for binary characteristics
 
 This script is using the "Auto" dataset of the "ISLR" package.
