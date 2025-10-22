@@ -122,6 +122,81 @@ while (itz <= do_loops) {
   prognos_vec = NULL #--> vector for the respective prediction values
   
   
+  #----------------- big while-loop ---#
+  i = 1
+  while (i <= md_l){
+    
+    md_ufac = unique(auto_data[,i]) #--> count unique factors in column i
+    
+    print(paste0("Attribut_", i, ": ", md_names[i], " hat ", length(md_ufac), " Faktoren: "))
+    print(" ")
+    
+    prognos_vec = as.character(result_df[i, 1]) #--> prognos_vec goes to prognos_list
+    
+    #------------------- aditional for-loop --#
+    for (iz in md_ufac){
+      print(iz)
+      print(" ")
+      
+      Sp_Fac = auto_data[auto_data[, i] == iz,]
+      
+      #--- Häufigkeiten ermitteln ---#    
+      Anzahl = length(Sp_Fac$origin) #--> count observations in iz-charactaristic of depending Variable (origin)
+      
+      #--> je nach 1 und nach 3 filtern
+      Sp_Fac_1 = Sp_Fac[Sp_Fac$origin == 1,]
+      
+      Sieg_x = length(Sp_Fac_1$origin)
+      Lose_x = Anzahl - Sieg_x #
+      
+      print(paste0("Siege: ", Sieg_x, " von ", Anzahl))
+      print(paste0("Lose: ", Lose_x, " von ", Anzahl))
+      
+      
+      if (Sieg_x >= Lose_x) {
+        prognos_vec = append(prognos_vec, c(as.character(iz), "Sieg")) #--> prognos_vec goes to prognos_list
+        F_Quote_einzel = Lose_x #--> temporary
+        print(paste0(iz, ": Sieg prognostiziert."))
+      } else {
+        prognos_vec = append(prognos_vec, c(as.character(iz), "Lose")) #--> prognos_vec goes to prognos_list
+        F_Quote_einzel = Sieg_x #--> temporary
+        print(paste0(iz, ": Lose prognostiziert."))
+      }
+      
+      
+      test_vec = append(test_vec, Anzahl)#--> 2 check 
+      
+      print(paste0("Fehlerquote: ", F_Quote_einzel, " von ", Anzahl))
+      print(" ")
+      
+      
+      F_Quote[i] = F_Quote[i] + F_Quote_einzel #--> error rate
+      i_Anzahl[i] = i_Anzahl[i] + Anzahl #--> count
+      
+    }
+    #----------------- for-loop end ---#
+    
+    
+    result_df[i,2] = paste0(F_Quote[i], " von ", i_Anzahl[i])
+    result_df[i,3] = F_Quote[i] / i_Anzahl[i] #--> error rate 
+    
+    prognos_list = append(prognos_list, list(prognos_vec)) #--> prediction vector being passed on to the list
+    prognos_vec = NULL #--> prediction vector being reset
+    
+    print(paste0("Gesamtfehler: ", F_Quote[i]))
+    print(paste0("Gesamtanzahl: ", i_Anzahl[i]))
+    print(paste0("Gesamtfehlerquote: ", F_Quote[i], " von ", i_Anzahl[i]))
+    print(paste0("Entspricht: ", F_Quote[i] / i_Anzahl[i]))
+    print(" ")
+    print("+-+-+_________________________________+-+-+")
+    print(" ")
+    
+    if (i == 15){break} #--> safety break
+    i = i + 1;
+  }
+  #----------------- big while-loop end ---#
+  
+  
   #--> in progress...
   
   
