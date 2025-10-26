@@ -149,24 +149,24 @@ while (itz <= do_loops) {
       Sieg_x = length(Sp_Fac_1$origin)
       Lose_x = Anzahl - Sieg_x #
       
-      print(paste0("Hits: ", Sieg_x, " of ", Anzahl))
-      print(paste0("No: ", Lose_x, " of ", Anzahl))
+      print(paste0("Score: ", Sieg_x, " of ", Anzahl))
+      print(paste0("Lose: ", Lose_x, " of ", Anzahl))
       
       
       if (Sieg_x >= Lose_x) {
         prognos_vec = append(prognos_vec, c(as.character(iz), "Sieg")) #--> prognos_vec goes to prognos_list
         F_Quote_einzel = Lose_x #--> temporary
-        print(paste0(iz, ": Sieg prognostiziert."))
+        print(paste0(iz, ": Score predicted."))
       } else {
         prognos_vec = append(prognos_vec, c(as.character(iz), "Lose")) #--> prognos_vec goes to prognos_list
         F_Quote_einzel = Sieg_x #--> temporary
-        print(paste0(iz, ": Lose prognostiziert."))
+        print(paste0(iz, ": Lose predicted."))
       }
       
       
       test_vec = append(test_vec, Anzahl)#--> 2 check 
       
-      print(paste0("Fehlerquote: ", F_Quote_einzel, " von ", Anzahl))
+      print(paste0("Error rate: ", F_Quote_einzel, " of ", Anzahl))
       print(" ")
       
       
@@ -183,12 +183,12 @@ while (itz <= do_loops) {
     prognos_list = append(prognos_list, list(prognos_vec)) #--> prediction vector being passed on to the list
     prognos_vec = NULL #--> prediction vector being reset
     
-    print(paste0("Gesamtfehler: ", F_Quote[i]))
-    print(paste0("Gesamtanzahl: ", i_Anzahl[i]))
-    print(paste0("Gesamtfehlerquote: ", F_Quote[i], " von ", i_Anzahl[i]))
-    print(paste0("Entspricht: ", F_Quote[i] / i_Anzahl[i]))
+    print(paste0("Count errors: ", F_Quote[i])) #--> Gesamtfehler
+    print(paste0("Count: ", i_Anzahl[i]))
+    print(paste0("error rate: ", F_Quote[i], " of ", i_Anzahl[i]))
+    print(paste0("error rate: ", F_Quote[i] / i_Anzahl[i]))
     print(" ")
-    print("+-+-+_________________________________+-+-+")
+    print("_______________________________________________")
     print(" ")
     
     if (i == 15){break} #--> safety break
@@ -205,7 +205,8 @@ while (itz <= do_loops) {
   min_FQ = subset(result_df, Fehlerquote == min_FQ)
   min_FQ = min_FQ[1, 1]
   print(" ")
-  print(paste0("Das Attribut mit der geringsten Fehlerquote lautet: ", min_FQ))
+  #print(paste0("Das Attribut mit der geringsten Fehlerquote lautet: ", min_FQ))
+  print(paste0("attribute with the least error rate: ", min_FQ))
   print(" ")
   print(" ")
   
@@ -213,17 +214,17 @@ while (itz <= do_loops) {
   i = 1
   while (i <= length(prognos_list)){
     
-    if (prognos_list[[i]][1] == min_FQ){ #--> da wo der Listeneintrag gleich dem Minimum-Wert ist
+    if (prognos_list[[i]][1] == min_FQ){
       
-      z = 2 #--> z beginnt bei 2 weil der erste Eintrag bereits im vorherigen Schritt abgeglichen wurde
+      z = 2 #--> start with 2
       while (z <= length(prognos_list[[i]])){
         
         prognos_vec_i = i #--> save position of prediction values
         
         if (prognos_list[[i]][z + 1] == "Lose"){progausgabe = "non-US"}
         if (prognos_list[[i]][z + 1] == "Sieg"){progausgabe = "US"}
-        print(paste0("Wenn ", print(min_FQ), " den Wert ", prognos_list[[i]][z], " annimmt, wird ", progausgabe, " vorhergesagt."))
-        
+        #print(paste0("Wenn ", print(min_FQ), " den Wert ", prognos_list[[i]][z], " annimmt, wird ", progausgabe, " vorhergesagt."))
+        print(paste0("When ", print(min_FQ), " is ", prognos_list[[i]][z], " then ", progausgabe, " is the prediction."))
         
         print(" ")
         z = z + 2
