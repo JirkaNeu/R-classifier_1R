@@ -149,8 +149,8 @@ while (itz <= do_loops) {
       Sieg_x = length(Sp_Fac_1$origin)
       Lose_x = Anzahl - Sieg_x #
       
-      print(paste0("Siege: ", Sieg_x, " von ", Anzahl))
-      print(paste0("Lose: ", Lose_x, " von ", Anzahl))
+      print(paste0("Hits: ", Sieg_x, " of ", Anzahl))
+      print(paste0("No: ", Lose_x, " of ", Anzahl))
       
       
       if (Sieg_x >= Lose_x) {
@@ -197,7 +197,75 @@ while (itz <= do_loops) {
   #----------------- big while-loop end ---#
   
   
-  #--> in progress...
+  #--> clean environment
+  rm(Anzahl, F_Quote, F_Quote_einzel, i_Anzahl, Lose_x, md_l, md_names, md_ufac, Sieg_x, test_vec)
+  
+  
+  min_FQ = min(result_df$Fehlerquote)
+  min_FQ = subset(result_df, Fehlerquote == min_FQ)
+  min_FQ = min_FQ[1, 1]
+  print(" ")
+  print(paste0("Das Attribut mit der geringsten Fehlerquote lautet: ", min_FQ))
+  print(" ")
+  print(" ")
+  
+  #--> prediction values being put together
+  i = 1
+  while (i <= length(prognos_list)){
+    
+    if (prognos_list[[i]][1] == min_FQ){ #--> da wo der Listeneintrag gleich dem Minimum-Wert ist
+      
+      z = 2 #--> z beginnt bei 2 weil der erste Eintrag bereits im vorherigen Schritt abgeglichen wurde
+      while (z <= length(prognos_list[[i]])){
+        
+        prognos_vec_i = i #--> save position of prediction values
+        
+        if (prognos_list[[i]][z + 1] == "Lose"){progausgabe = "non-US"}
+        if (prognos_list[[i]][z + 1] == "Sieg"){progausgabe = "US"}
+        print(paste0("Wenn ", print(min_FQ), " den Wert ", prognos_list[[i]][z], " annimmt, wird ", progausgabe, " vorhergesagt."))
+        
+        
+        print(" ")
+        z = z + 2
+      }  
+    }
+    
+    i = i + 1
+    if (i >= 15){break} #--> safety break
+  }
+  
+  
+  
+  #-----------------------------------------------------#
+  #--- 6. apply classification training to test data ---#
+  #-----------------------------------------------------#
+  
+  
+  
+  prognos_vec = prognos_list[[prognos_vec_i]] #--> prognos_vec wird neu beschrieben mit dem gewünschten Listeneintrag
+  
+  m_pos = match(min_FQ, names(auto_data_test)) #--> min_FQ enthält das Sieger-Attribut, in welcher Spalte befindet es sich?
+  
+  
+  
+  auto_data_test$prediction = NA #--> new column for prediction values
+  
+  
+  i = 2
+  
+  while(i <= length(prognos_vec)){
+    
+    Wert1 = as.numeric(prognos_vec[i]) #--> turn character to numeric
+    Wert2 = (prognos_vec[i + 1])
+    if (Wert2 == "Lose"){Wert2 = 3}
+    if (Wert2 == "Sieg"){Wert2 = 1}
+    
+    auto_data_test$prediction[auto_data_test[, m_pos] == Wert1] <- Wert2 #--> filter column m_pos for Wert1 and pass on to $prediction Wert2
+    
+    i = i + 2
+    if (i >= 25){break} #--> safety break
+  }
+  
   
   
   
