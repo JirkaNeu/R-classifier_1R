@@ -14,7 +14,7 @@ quantilize <- function(this_col){
 }
 
 
-do_loops = 1 #--> how many times the classification is to be repeated
+do_loops = 10 #--> how many times the classification is to be repeated
 train_extent = 0.7 #--> define percentage of train data
 
 auto_data = NULL
@@ -268,8 +268,47 @@ while (itz <= do_loops) {
   }
   
   
+  #--------------------------------------------#
+  #--- 7. calculate success- and error-rate ---#
+  #--------------------------------------------#
   
   
+  Filter_T1 = subset(auto_data_test, origin == 1)
+  Treffer1 = nrow(subset(Filter_T1, prediction == 1))
+  Fehler1 = nrow(Filter_T1) - Treffer1
+  
+  Filter_T2 = subset(auto_data_test, origin == 3)
+  Treffer2 = nrow(subset(Filter_T2, prediction == 3))
+  Fehler2 = nrow(Filter_T2) - Treffer2
+  
+  
+  TrefferQuote = (Treffer1 + Treffer2) / (Treffer1 + Treffer2 + Fehler1 + Fehler2)
+  FehlerQuote = (Fehler1 + Fehler2) / (Treffer1 + Treffer2 + Fehler1 + Fehler2)
+  
+  print(paste0("Success Rate: ", TrefferQuote, " %"))
+  print(" ")
+  print(paste0("Error Rate: ", FehlerQuote, " %"))
+  
+  
+  success_rate_mean[itz] = TrefferQuote
   
   itz = itz + 1
+  if (itz > do_loops){break} #--> safety break
 }
+#--> Gesamtschleife Ende <-----
+
+#--> clean environment
+rm(Filter_T1, Filter_T2, Sp_Fac, Fehler1, Fehler2, FehlerQuote, progausgabe, Treffer1, Treffer2, TrefferQuote, Wert1, Wert2)
+
+
+#--------------------------------#
+#--- 7.1 average success rate ---#
+#--------------------------------#
+
+print("")
+print(paste0(itz - 1, " run(s) of the script have resulted in an average success rate of ", round(mean(success_rate_mean), 4), " %."))
+print("")
+
+summary(success_rate_mean)
+
+
