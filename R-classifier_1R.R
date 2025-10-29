@@ -1,6 +1,11 @@
 #install.packages("ISLR")
 library(ISLR)
 
+## 2dos
+## upsampling
+## result view
+
+
 quantilize <- function(this_col){
   col_num = which(colnames(auto_data) == this_col)
   my_qu = quantile(auto_data[, col_num])
@@ -133,17 +138,17 @@ while (itz <= do_loops) {
     
     prognos_vec = as.character(result_df[i, 1]) #--> prognos_vec goes to prognos_list
     
-    #------------------- aditional for-loop --#
+    #------------------- additional for-loop --#
     for (iz in md_ufac){
       print(iz)
       print(" ")
       
       Sp_Fac = auto_data[auto_data[, i] == iz,]
       
-      #--- Häufigkeiten ermitteln ---#    
-      Anzahl = length(Sp_Fac$origin) #--> count observations in iz-charactaristic of depending Variable (origin)
+      #--- get occurrences ---#    
+      Anzahl = length(Sp_Fac$origin) #--> count observations in iz-characteristic of depending Variable (origin)
       
-      #--> je nach 1 und nach 3 filtern
+      #--> filter origin 1
       Sp_Fac_1 = Sp_Fac[Sp_Fac$origin == 1,]
       
       Sieg_x = length(Sp_Fac_1$origin)
@@ -295,7 +300,7 @@ while (itz <= do_loops) {
   itz = itz + 1
   if (itz > do_loops){break} #--> safety break
 }
-#--> Gesamtschleife Ende <-----
+#--> big while-loop end <-----
 
 #--> clean environment
 rm(Filter_T1, Filter_T2, Sp_Fac, Fehler1, Fehler2, FehlerQuote, progausgabe, Treffer1, Treffer2, TrefferQuote, Wert1, Wert2)
