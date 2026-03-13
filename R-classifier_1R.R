@@ -188,7 +188,7 @@ while (itz <= do_loops) {
     prognos_list = append(prognos_list, list(prognos_vec)) #--> prediction vector being passed on to the list
     prognos_vec = NULL #--> prediction vector being reset
     
-    print(paste0("Count errors: ", F_Quote[i])) #--> Gesamtfehler
+    print(paste0("Count errors: ", F_Quote[i])) #--> all errors
     print(paste0("Count: ", i_Anzahl[i]))
     print(paste0("error rate: ", F_Quote[i], " of ", i_Anzahl[i]))
     print(paste0("error rate: ", F_Quote[i] / i_Anzahl[i]))
@@ -248,9 +248,9 @@ while (itz <= do_loops) {
   
   
   
-  prognos_vec = prognos_list[[prognos_vec_i]] #--> prognos_vec wird neu beschrieben mit dem gewünschten Listeneintrag
+  prognos_vec = prognos_list[[prognos_vec_i]] #--> update prognos_vec with respective list entry
   
-  m_pos = match(min_FQ, names(auto_data_test)) #--> min_FQ enthält das Sieger-Attribut, in welcher Spalte befindet es sich?
+  m_pos = match(min_FQ, names(auto_data_test)) #--> min_FQ has the win, in which column is it?
   
   
   
